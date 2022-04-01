@@ -11,7 +11,7 @@ public interface ClienteRepository extends Repository<Cliente, Long> {
 
     Cliente save(Cliente cliente);
 
-    void findById(Long id);
+    Cliente findById(Long id);
 
     void deleteById(Long id);
 }

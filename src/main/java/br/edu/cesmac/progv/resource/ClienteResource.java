@@ -1,37 +1,39 @@
 package br.edu.cesmac.progv.resource;
 
 import br.edu.cesmac.progv.entity.Cliente;
-import br.edu.cesmac.progv.repository.ClienteRepository;
+import br.edu.cesmac.progv.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.Id;
 import java.util.List;
 
 @RestController
-@RequestMapping("/clientes")
 public class ClienteResource {
 
     @Autowired
-    ClienteRepository clienteRepository;
+    ClienteService clienteService;
 
-    //LISTANDO TODOS OS CLIENTES
-    @RequestMapping(method = RequestMethod.GET)
-    public List<Cliente> listar(){
-        return this.clienteRepository.findAll();
+    @RequestMapping(value = "/clientes", method = RequestMethod.GET)
+    public List<Cliente> buscarClientes() {
+        return this.clienteService.buscarClientes();}
+
+    @RequestMapping(value = "/clientes/{id}", method = RequestMethod.GET)
+    public Cliente buscarCliente(@RequestParam("id") Long id) {
+        return this.clienteService.buscarCliente(id); }
+
+    @RequestMapping(value = "/produto", method = RequestMethod.POST)
+    public Cliente cadastroCliente(@RequestBody Cliente cliente) {
+        return this.clienteService.cadastro(cliente);
     }
 
-    //LISTAR CLIENTE POR ID
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
-    public Cliente listarId(@RequestParam("id") Long id){return this.clienteRepository.findById();}
-
-    //CADASTRO NOVO CLIENTE
-    @RequestMapping(method = RequestMethod.POST)
-    public Cliente cadastrar(@RequestBody Cliente cliente){
-        return this.clienteRepository.save(cliente);
+    @RequestMapping(value = "/clientes/{id}", method = RequestMethod.DELETE)
+    public void delete(@PathVariable("id") Long id) {
+        this.clienteService.deletar(id);
     }
 
-    //DELETANDO CLIENTE
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-    public Cliente deletar(@RequestParam("id") Long id){return this.clienteRepository.findById();}
+    @RequestMapping(value = "/clientes", method = RequestMethod.PUT)
+    public Cliente alterar(@RequestBody Cliente cliente) {
+        this.clienteService.cadastro(cliente);
+        return cliente;
+    }
 }
